@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class LoginRequest extends FormRequest
+class NewsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,8 +25,10 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
-            'password' => 'required',
+            'title' => 'required',
+            'content' => 'required',
+            // 'files' => 'required|array|size:4',
+            // 'files.*' => 'required|file|mimes:jpeg,jpg,png|max:2048'
         ];
     }
     protected function failedValidation(Validator $validator)

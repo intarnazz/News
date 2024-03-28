@@ -15,10 +15,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NewsController;
 
 Route::post('/registration', [UserController::class, 'reg']);
 Route::post('/authorization', [UserController::class, 'login']);
 
+Route::prefix('news')->group(function () {
+  Route::get('/', [NewsController::class, 'get']);
+});
+
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [UserController::class, 'logout']);
+  Route::post('/logout', [UserController::class, 'logout']);
+  Route::prefix('news')->group(function () {
+    Route::post('/upload', [NewsController::class, 'add']);
+    Route::get('/publish/{id}', [NewsController::class, 'publish']);
+  });
 });
