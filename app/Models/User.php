@@ -38,4 +38,15 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = Hash::make($value);
     }
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->role()->create(['role' => 'default_user']);
+        });
+    }
+
+    public function role()
+    {
+        return $this->hasOne(Role::class);
+    }
 }
