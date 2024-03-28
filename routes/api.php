@@ -27,6 +27,7 @@ Route::prefix('news')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
   Route::post('/logout', [UserController::class, 'logout']);
   Route::prefix('news')->group(function () {
+    Route::get('/unpublished', [NewsController::class, 'unpublished']);
     Route::post('/upload', [NewsController::class, 'add']);
     Route::get('/publish/{id}', [NewsController::class, 'publish']);
   });

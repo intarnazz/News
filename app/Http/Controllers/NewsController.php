@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NewsRequest;
+use App\Http\Resources\NewsResource;
 use App\Models\News;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class NewsController extends Controller
   {
     $user = auth()->user()->load('role');
     $news = News::find($id);
-    if ($news->user_id != $user->id || $user->role->role != 'admin') {
+    if ($news->user_id != $user->id) {
       return response([
         'success' => false,
         'message' => 'Forbidden for you',
@@ -49,7 +50,20 @@ class NewsController extends Controller
     return response([
       'success' => true,
       'message' => 'success',
-      'news' => $news
+      'news' => NewsResource::collection($news)
+    ], 200);
+  }
+  public function unpublished()
+  {
+    $user = auth()->user()->load('role');
+    $news = News::where('user_id', $user->id)
+      ->where('status', 'unpublished')
+      ->with('user')
+      ->get();
+    return response([
+      'success' => true,
+      'message' => 'success',
+      'news' => NewsResource::collection($news)
     ], 200);
   }
 }
